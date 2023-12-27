@@ -5,7 +5,7 @@ const cors = require("cors");
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Successful response.');
+  res.send('Successful response1.');
 });
 
 app.get("/ts/:studentId", async (req, res) => {
