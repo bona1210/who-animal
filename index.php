@@ -5,16 +5,9 @@
   <p> PHP 與 HTML 關係之範例 </p>
 
    <?php
-
-    //echo “這是 PHP 執行結果_1<BR>”;
-
-    echo “這是 PHP 執行結果_2<BR>”;
-  
-   ?>
-
-    這是 HTML 輸出文字_1<BR>
-
-    這是 HTML 輸出文字_2<BR>
+    echo "執行結果";
+  ?>
+   這是 HTML 輸出文字
 
 </body>
 
