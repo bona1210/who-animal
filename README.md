@@ -1,5 +1,3 @@
-https://who-animal.vercel.app/ts/message
-
 # 輸出順序似乎不可測
 
 # 以下為使用範例教學
@@ -13,3 +11,4 @@ https://who-animal.vercel.app/ts/message
     https://who-animal.vercel.app/ts/store/store          <<商店資訊
 
 
+最後編輯時間：2023/12/27 18:47
