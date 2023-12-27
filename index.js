@@ -4,9 +4,10 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Successful response1.');
+/*app.get('/', (req, res) => {
+  res.send('Successful response.');
 });
+*/
 
 app.get("/ts/:studentId", async (req, res) => {
     // 從動態路由參數中取得 studentId
