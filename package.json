@@ -1,5 +1,5 @@
 {
-  "dependencies": {
+    "dependencies": {
     "browser-sync": "^2.27.11",
     "cors": "^2.8.5",
     "express": "^4.17.3",
@@ -21,3 +21,4 @@
   "license": "ISC",
   "description": ""
 }
+
