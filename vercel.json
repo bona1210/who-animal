@@ -1,5 +1,5 @@
 {
     "builds": [{ "src": "index.js", "use": "@now/node" }],
-    "routes": [{ "src": "(.*)", "dest": "index.php" }]
+    "routes": [{ "src": "/api/(.*)", "dest": "index.js" }]
   }
   
