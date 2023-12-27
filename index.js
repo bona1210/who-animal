@@ -1,58 +1,54 @@
-const express = require('express');
-const db = require("./config");
-const app = express();
-const cors = require("cors");
-app.use(cors());
-
-/*app.get('/', (req, res) => {
-  res.send('Successful response.');
-});
-*/
-
 app.get("/ts/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
     const studentId = req.params.studentId;
 
     try {
-        const document = await db.collection("ClassA").doc(studentId).get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        const classADocument = await db.collection("ClassA").doc(studentId).get();
+
+        if (!classADocument.exists) {
+            res.status(404).json({ error: "ClassA Document not found", studentId });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
-        res.json(data);
-    } catch (error) {
-        console.error("Error retrieving document:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-//------------------------------------------------------------------
+        const classAData = { id: classADocument.id, ...classADocument.data() };
 
-app.get("/ts/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
+        const locationDocument = await db.collection("location").doc(studentId).get();
 
-    try {
-        const document = await db.collection("location").doc(studentId).get();
-
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (!locationDocument.exists) {
+            res.status(404).json({ error: "Location Document not found", studentId });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
-        res.json(data);
+        const locationData = { id: locationDocument.id, ...locationDocument.data() };
+
+        const orderDocument = await db.collection("order").doc(studentId).get();
+
+        if (!orderDocument.exists) {
+            res.status(404).json({ error: "Order Document not found", studentId });
+            return;
+        }
+
+        const orderData = { id: orderDocument.id, ...orderDocument.data() };
+
+        const storeDocument = await db.collection("store").doc(studentId).get();
+
+        if (!storeDocument.exists) {
+            res.status(404).json({ error: "Store Document not found", studentId });
+            return;
+        }
+
+        const storeData = { id: storeDocument.id, ...storeDocument.data() };
+
+        const mergedData = {
+            classA: classAData,
+            location: locationData,
+            order: orderData,
+            store: storeData
+        };
+
+        res.json(mergedData);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
-
-
-
-
-app.listen(3000, () => console.log('Example app is listening on port 3000.'));
-
-
