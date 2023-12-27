@@ -6,7 +6,7 @@ app.use(cors());
 
 
 
-app.get("/ts/:studentId", async (req, res) => {
+app.get("/ts/classA/:studentId", async (req, res) => {
     // 從動態路由參數中取得 studentId
     const studentId = req.params.studentId;
 
@@ -26,7 +26,7 @@ app.get("/ts/:studentId", async (req, res) => {
     }
 });
 //-----------------------------------------------------------------
-app.get("/ts/:studentId", async (req, res) => {
+app.get("/ts/location/:studentId", async (req, res) => {
     // 從動態路由參數中取得 studentId
     const studentId = req.params.studentId;
 
@@ -46,7 +46,7 @@ app.get("/ts/:studentId", async (req, res) => {
     }
 });
 //-----------------------------------------------------------------
-app.get("/ts/:studentId", async (req, res) => {
+app.get("/ts/order/:studentId", async (req, res) => {
     // 從動態路由參數中取得 studentId
     const studentId = req.params.studentId;
 
@@ -66,7 +66,7 @@ app.get("/ts/:studentId", async (req, res) => {
     }
 });
 //-----------------------------------------------------------------
-app.get("/ts/:studentId", async (req, res) => {
+app.get("/ts/store/:studentId", async (req, res) => {
     // 從動態路由參數中取得 studentId
     const studentId = req.params.studentId;
 
