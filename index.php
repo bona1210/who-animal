@@ -9,7 +9,7 @@
        echo “這是 PHP 執行結果_1<BR>”;
 
     echo “這是 PHP 執行結果_2<BR>”;
-
+  
    ?>
 
     這是 HTML 輸出文字_1<BR>
