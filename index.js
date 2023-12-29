@@ -4,108 +4,114 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
-
-
-app.get("/ts/classA/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
-
+// 一次性讀取 ClassA 集合
+app.get("/ts/classA", async (req, res) => {
     try {
-        const document = await db.collection("ClassA").doc(studentId).get();
+        const snapshot = await db.collection("ClassA").get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (snapshot.empty) {
+            res.status(404).json({ error: "No documents found in ClassA collection" });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
+        const data = [];
+        snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+
         res.json(data);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
-//-----------------------------------------------------------------
-app.get("/ts/location/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
 
+// 一次性讀取 location 集合
+app.get("/ts/location", async (req, res) => {
     try {
-        const document = await db.collection("location").doc(studentId).get();
+        const snapshot = await db.collection("location").get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (snapshot.empty) {
+            res.status(404).json({ error: "No documents found in location collection" });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
+        const data = [];
+        snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+
         res.json(data);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
-//-----------------------------------------------------------------
-app.get("/ts/order/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
 
+// 一次性讀取 order 集合
+app.get("/ts/order", async (req, res) => {
     try {
-        const document = await db.collection("order").doc(studentId).get();
+        const snapshot = await db.collection("order").get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (snapshot.empty) {
+            res.status(404).json({ error: "No documents found in order collection" });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
+        const data = [];
+        snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+
         res.json(data);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
-//-----------------------------------------------------------------
-app.get("/ts/store/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
 
+// 一次性讀取 store 集合
+app.get("/ts/store", async (req, res) => {
     try {
-        const document = await db.collection("store").doc(studentId).get();
+        const snapshot = await db.collection("store").get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (snapshot.empty) {
+            res.status(404).json({ error: "No documents found in store collection" });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
+        const data = [];
+        snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+
         res.json(data);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
-//-----------------------------------------------------------------
-app.get("/ts/status/:studentId", async (req, res) => {
-    // 從動態路由參數中取得 studentId
-    const studentId = req.params.studentId;
 
+// 一次性讀取 status 集合
+app.get("/ts/status", async (req, res) => {
     try {
-        const document = await db.collection("status").doc(studentId).get();
+        const snapshot = await db.collection("status").get();
 
-        if (!document.exists) {
-            res.status(404).json({ error: "Document not found", studentId });
+        if (snapshot.empty) {
+            res.status(404).json({ error: "No documents found in status collection" });
             return;
         }
 
-        const data = { id: document.id, ...document.data() };
+        const data = [];
+        snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+
         res.json(data);
     } catch (error) {
-        console.error("Error retrieving document:", error);
+        console.error("Error retrieving documents:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
 app.listen(3000, () => console.log('Example app is listening on port 3000.'));
-
-
