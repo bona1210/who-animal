@@ -3,8 +3,10 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-#define FIREBASE_HOST "https://who-animal-default-rtdb.asia-southeast1.firebasedatabase.app"
+#define FIREBASE_HOST "who-animal-default-rtdb.asia-southeast1.firebasedatabase.app"
+
 #define FIREBASE_AUTH "AIzaSyAlgWEIvBw44j0PoaEZb0dyMkco1lDSWsg"
+
 
 
 #define WIFI_SSID "3F-CHT-WIFI"
@@ -43,6 +45,7 @@ void setup() {
 }
 
 void loop() {
+
   // WIFI
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected. Reconnecting...");
