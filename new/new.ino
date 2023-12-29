@@ -1,28 +1,30 @@
-#include <FirebaseESP32.h>
 #include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-
-#define FIREBASE_HOST "who-animal-default-rtdb.asia-southeast1.firebasedatabase.app"
-
-#define FIREBASE_AUTH "AIzaSyAlgWEIvBw44j0PoaEZb0dyMkco1lDSWsg"
-
-
 
 #define WIFI_SSID "3F-CHT-WIFI"
 #define WIFI_PASSWORD "055339019"
 
-FirebaseData firebaseData;
+const char *mqtt_server = "broker.MQTTGO.io";
+const int mqtt_port = 1883;
+const char *mqtt_topic = "test";
+
+WiFiClient espClient;
+PubSubClient mqttClient(espClient);
 
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 28800;  // GMT+8
 const int daylightOffset_sec = 0;
-
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec, daylightOffset_sec);
 
 unsigned long lastUpdateTime = 0;
 const unsigned long updateInterval = 20000;  // 20 秒
+
+// Firebase 的路徑
+const char *firebase_path = "/location/location1";
 
 void setup() {
   Serial.begin(115200);
@@ -34,17 +36,21 @@ void setup() {
   }
   Serial.println("Connected to WiFi");
 
-  // 初始化 NTP 客户端
+  // 初始化 NTP 客戶端
   timeClient.begin();
 
-  // Firebase 初始化
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  delay(2000);  //Firebase 初始化
+  // 初始化 MQTT 客戶端
+  mqttClient.setServer(mqtt_server, mqtt_port);
 
-  Serial.println("Connected to Firebase");
+  Serial.println("Connected to MQTT");
 }
 
 void loop() {
+  if (!mqttClient.connected()) {
+    reconnectMQTT();
+  }
+
+  mqttClient.loop();
 
   // WIFI
   if (WiFi.status() != WL_CONNECTED) {
@@ -57,46 +63,53 @@ void loop() {
     Serial.println("Connected to WiFi");
   }
 
-  
   timeClient.update();
 
   // 取得目前時間
-  String loc_time = getCurrentTime();
+  long loc_time = getCurrentTimestamp();
 
-  
   if (millis() - lastUpdateTime >= updateInterval) {
     // 准备上传的数据
     String loc_address = "中興興村村口";
-    String loc_image = "www.google.com";
-    String loc_msg = "test message1";
     String loc_name = "2號桿";
     String loc_state = "12";
 
-    //JSON
-    String jsonString = "{\"loc_address\":\"" + loc_address + "\",\"loc_image\":\"" + loc_image + "\",\"loc_msg\":\"" + loc_msg + "\",\"loc_name\":\"" + loc_name + "\",\"loc_state\":\"" + loc_state + "\",\"loc_time\":\"" + loc_time + "\"}";
+    // JSON
+    DynamicJsonDocument jsonDoc(256);
+    jsonDoc["loc_address"] = loc_address;
+    jsonDoc["loc_name"] = loc_name;
+    jsonDoc["loc_state"] = loc_state;
+    jsonDoc["loc_time"] = loc_time;
 
-    
+    String jsonString;
+    serializeJson(jsonDoc, jsonString);
+
     Serial.println("Data to upload:");
     Serial.println(jsonString);
 
-    // 上傳 Firestore
-    if (Firebase.setJSON(firebaseData, "/ts/location/location1", jsonString)) {
-      Serial.println("Data uploaded to Firestore");
-    } else {
-      Serial.println("Error uploading data to Firestore");
-      Serial.println(firebaseData.errorReason());
-    }
+    // Publish to MQTT
+    mqttClient.publish(mqtt_topic, (firebase_path + jsonString).c_str());  // 指定 Firebase 的路徑
 
     // 更新時間
     lastUpdateTime = millis();
   }
 
- 
-
-  delay(100);  
+  delay(100);
 }
 
-String getCurrentTime() {
-  String formattedTime = timeClient.getFormattedTime();
-  return formattedTime;
+long getCurrentTimestamp() {
+  return timeClient.getEpochTime();
+}
+
+void reconnectMQTT() {
+  while (!mqttClient.connected()) {
+    Serial.println("Connecting to MQTT...");
+    if (mqttClient.connect("ESP32Client")) {
+      Serial.println("Connected to MQTT");
+      mqttClient.subscribe(mqtt_topic);
+    } else {
+      Serial.println("Connection failed. Retrying in 5 seconds...");
+      delay(5000);
+    }
+  }
 }
