@@ -10,9 +10,8 @@
 # mqtt線上伺服器
 https://broker.mqttgo.io
 
-topic:test
-(上面先點連結>Topic輸入test即可收到esp32資料)
 
 
 
-最後編輯時間：2023/12/29 11:36
+
+最後編輯時間：2023/12/29 11:42
